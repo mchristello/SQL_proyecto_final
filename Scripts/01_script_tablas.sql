@@ -1,6 +1,6 @@
 DROP SCHEMA IF EXISTS seguros;
 
-CREATE DATABASE IF NOT EXISTS seguros;
+CREATE SCHEMA IF NOT EXISTS seguros;
 USE seguros;
 
 CREATE TABLE Clients (
@@ -47,12 +47,12 @@ CREATE TABLE producers (
 CREATE TABLE Policies (
 	policy_number INT PRIMARY KEY NOT NULL,
 	producer_number INT NOT NULL,
-	start_date DATE NOT NULL,
-	ending_date DATE NOT NULL,
 	coverage_id INT NOT NULL,
 	vehicle_id INT NOT NULL,
-	fee DECIMAL(10, 2) NOT NULL,
 	client INT NOT NULL,
+	fee DECIMAL(10, 2) NOT NULL,
+	start_date DATE NOT NULL,
+	ending_date DATE NOT NULL,
 	FOREIGN KEY (client) REFERENCES Clients(client_id),
 	FOREIGN KEY (coverage_id) REFERENCES Coverage(coverage_id),
 	FOREIGN KEY (vehicle_id) REFERENCES vehicles(vehicle_id),
@@ -61,10 +61,10 @@ CREATE TABLE Policies (
 
 CREATE TABLE Claims (
 	claim_id INT PRIMARY KEY AUTO_INCREMENT,
-	claim_date DATE NOT NULL,
 	client_id INT NOT NULL,
 	policy_number INT NOT NULL,
 	payment_made BOOLEAN DEFAULT false,
+	claim_date DATE NOT NULL,
 	description TEXT,
 	FOREIGN KEY (policy_number) REFERENCES Policies(policy_number),
 	FOREIGN KEY (client_id) REFERENCES clients(client_id)
@@ -72,10 +72,10 @@ CREATE TABLE Claims (
 
 CREATE TABLE Payments (
 	payment_id INT PRIMARY KEY AUTO_INCREMENT,
-	payment_date DATE, -- YYYY-MM-DD
-	amount DECIMAL(12, 2) NOT NULL,
 	policy_number INT NOT NULL,
 	claim_id INT NOT NULL,
+	amount DECIMAL(12, 2) NOT NULL,
+	payment_date DATE, -- YYYY-MM-DD
 	FOREIGN KEY (policy_number) REFERENCES Policies(policy_number),
 	FOREIGN KEY (claim_id) REFERENCES claims(claim_id)
 );
@@ -92,9 +92,9 @@ CREATE TABLE employees (
 
 CREATE TABLE Clients_Register_Log (
 	log_id INT PRIMARY KEY AUTO_INCREMENT,
-	timestamp DATE NOT NULL,
     modified_id INT NOT NULL,
-    user VARCHAR(100)
+    user VARCHAR(100),
+	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 

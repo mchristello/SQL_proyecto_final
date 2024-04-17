@@ -16,7 +16,7 @@
 
 
 ## Back Up
-- En caso de que se requiera de hacer backup de toda la DB, correr todo el script del archivo que se encuentra dentro de la carpeta con dicho nombre.
+- En caso de que se requiera de hacer backup de todas las tablas de la DB, correr todo el script del archivo que se encuentra dentro de la carpeta con dicho nombre.
 
 ---
 ### DIAGRAMA DE LA DB

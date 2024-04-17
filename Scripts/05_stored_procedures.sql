@@ -4,26 +4,35 @@ USE seguros;
 -- CREACION DE SP
 
 
--- SP PARA NUEVO CLIENTE
+-- 1° SP PARA NUEVO CLIENTE
 DELIMITER //
-
-CREATE PROCEDURE sp_NewClient(
-	IN clientName VARCHAR(50),
-    IN clientLastName VARCHAR(50),
-    IN email VARCHAR(100)
+CREATE PROCEDURE sp_InsertDelete_Client(
+    IN operation VARCHAR(10),
+    IN client_name VARCHAR(50),
+    IN client_lastName VARCHAR(50),
+    IN client_email VARCHAR(100),
+    IN id INT
 )
 BEGIN
-	INSERT INTO clients (first_name, last_name, email)
-    VALUES (clientName, clientLastName, email);
+    IF operation = 'insert' THEN
+        INSERT INTO clients (first_name, last_name, email)
+        VALUES (client_name, client_lastName, client_email);
+        SELECT 'New Client OK' AS resultado;
+    ELSEIF operation = 'delete' THEN
+        DELETE FROM clients WHERE client_id = id;
+        SELECT 'Client Deleted OK' AS resultado;
+    ELSE
+        SELECT 'Invalid operation' AS resultado;
+    END IF;
 END //
-
 DELIMITER ;
 
-CALL sp_NewClient('Bastian', 'Christello', 'b.christello@gmail.com');
+-- PRUEBA DEL PROCEDURE
+-- CALL sp_InsertDelete_Client ('delete', 'Austin', 'Nunez', 'pharetra@icloud.edu', 27);
 
 
 
--- PROCEDURE PARA ACTUALIZAR LA TABLA CLAIMS CUANDO SE REALIZO UN PAGO
+-- 2° PROCEDURE PARA ACTUALIZAR LA TABLA CLAIMS CUANDO SE REALIZO UN PAGO
 DELIMITER //
 CREATE PROCEDURE sp_UpdateClaim(
 	IN c_claim_id INT,
@@ -32,9 +41,8 @@ CREATE PROCEDURE sp_UpdateClaim(
 BEGIN
 	UPDATE claims SET payment_made = c_payment_update WHERE claim_id = c_claim_id;
 END //
-
 DELIMITER ;
 
-CALL sp_UpdateClaim(1, true);
-
+-- PRUEBA DEL PROCEDURE
 SELECT * FROM claims;
+-- CALL sp_UpdateClaim(2, false);

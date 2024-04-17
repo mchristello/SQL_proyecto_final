@@ -12,13 +12,10 @@ BEGIN
 END //
 DELIMITER ;
 
-SELECT * FROM clients;
-
-UPDATE clients
-SET email = 'juancitoPerez@email.com'
-WHERE client_id = 1;
-
-SELECT * from clients_register_log;
+-- PRUEBA DE TRIGGER
+/* SELECT * FROM clients;
+UPDATE clients SET email = 'juancitoPerez@email.com' WHERE client_id = 1;
+SELECT * from clients_register_log; */
 
 
 -- TRIGGER QUE SE ACTIVA CUANDO SE INSERTA UNA NUEVA LINEA EN LA TABLA PAYMENTS
@@ -41,14 +38,12 @@ END //
 DELIMITER ;
 
 -- VERIFICO LA INFORMACIÓN DE LA TABLA PAYMENTS
-SELECT * FROM PAYMENTS;
-
+-- SELECT * FROM PAYMENTS;
 -- INSERT UN NUEVO VALOR EN LA TABLA
-INSERT INTO payments (payment_date, amount, policy_number, claim_id)
-VALUE ('2024-01-02', 215000.00, 1, 1);
-
+-- INSERT INTO payments (payment_date, amount, policy_number, claim_id)
+-- VALUE ('2024-01-02', 215000.00, 1, 1);
 -- VERIFICO SI SE EL TRIGGER REALIZÓ LA ACTUALIZACIÓN EN LA TABLA TOTAL_AMOUNT_PAID
-SELECT * FROM total_amount_paid;
+-- SELECT * FROM total_amount_paid;
 
 
 
@@ -61,8 +56,7 @@ FOR EACH ROW
 BEGIN
 	UPDATE meassure_data
     SET total_clients = total_clients + 1;
-END
-//
+END //
 
 CREATE TRIGGER TRG_meassure_data_policies
 AFTER INSERT ON policies
@@ -71,6 +65,5 @@ BEGIN
 	UPDATE meassure_data
     SET total_policies = total_policies + 1,
 		total_fees = total_fees + NEW.fee;
-END;
-//
+END //
 DELIMITER ;

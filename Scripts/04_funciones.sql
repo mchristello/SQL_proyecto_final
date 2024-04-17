@@ -1,6 +1,4 @@
 USE seguros;
-
-
 -- CREACION DE FUNCIONES
 
 
@@ -27,13 +25,13 @@ BEGIN
 END //
 DELIMITER ;
 
-SELECT fn_producer_info(7039); -- (NUMEROS PARA PRUEBAS: 809, 370, 7039, 1058, 12651, 689)
+-- SELECT fn_producer_info(7039); -- (NUMEROS PARA PRUEBAS: 809, 370, 7039, 1058, 12651, 689)
 
 
 -- FUNCION PARA OBTENER LA UBICACION DE UNA OFICINA A TRAVES DEL ID
 DROP FUNCTION IF EXISTS fn_get_location;
-DELIMITER //
 
+DELIMITER //
 CREATE FUNCTION fn_get_location (param INT)
 RETURNS VARCHAR(100)
 READS SQL DATA
@@ -46,5 +44,27 @@ END //
 
 DELIMITER ;
 
-SELECT fn_get_location(2);
-    
+-- SELECT fn_get_location(2);
+
+
+-- FUNCION QUE RECIBE EL ID DE UN VEHICULO Y ACTUALIZA SU VALOR SEGÚN EL PORCENTAJE SOLICITADO
+DROP FUNCTION IF EXISTS fn_update_vehicle_value;
+
+DELIMITER //
+CREATE FUNCTION fn_update_vehicle_value (
+	vehicleId INT,
+    percentage DECIMAL(5, 2)
+)	
+RETURNS DECIMAL(14, 2)
+READS SQL DATA
+BEGIN
+	DECLARE currentValue DECIMAL (14, 2);
+	DECLARE updatedValue DECIMAL (14, 2);
+    SELECT value INTO currentValue FROM vehicles WHERE vehicle_id = vehicleId;
+    SET updatedValue = currentValue * (1 + (percentage/100));
+    UPDATE vehicles SET value = updatedValue WHERE vehicle_id = vehicleId;
+    RETURN updatedValue;
+END //
+DELIMITER ; 
+
+-- SELECT fn_update_vehicle_value(1, 10.00); 
